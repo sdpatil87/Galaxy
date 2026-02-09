@@ -1,8 +1,6 @@
 # === GLOBAL IGNORES ===
 # Dependencies
 **/node_modules/
-package-lock.json
-**/package-lock.json
 yarn.lock
 **/yarn.lock
 pnpm-lock.yaml
