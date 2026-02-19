@@ -1,0 +1,9 @@
+.input {
+  @apply w-full border border-slate-200 dark:border-slate-700 rounded px-3 py-2 bg-transparent;
+}
+.btn-primary {
+  @apply inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded;
+}
+.btn-outline {
+  @apply inline-flex items-center px-3 py-2 border rounded border-slate-300 text-slate-700;
+}
