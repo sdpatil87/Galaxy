@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     // a user can be superadmin or have memberships in orgs
     isSuperAdmin: { type: Boolean, default: false },
+    settings: {
+      theme: { type: String, enum: ["light", "dark"], default: "light" },
+      notifications: { type: Boolean, default: true },
+    },
     memberships: [membershipSchema],
   },
   { timestamps: true },

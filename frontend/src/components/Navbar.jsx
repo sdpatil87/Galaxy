@@ -34,6 +34,12 @@ export default function Navbar() {
                 Projects
               </Link>
               <Link
+                to="/tasks/pending"
+                className="text-sm text-slate-600 hover:text-slate-900"
+              >
+                Pending Tasks
+              </Link>
+              <Link
                 to="/attendance"
                 className="text-sm text-slate-600 hover:text-slate-900"
               >
@@ -45,16 +51,40 @@ export default function Navbar() {
               >
                 Organizations
               </Link>
+              <Link
+                to="/settings"
+                className="text-sm text-slate-600 hover:text-slate-900"
+              >
+                Settings
+              </Link>
+              <Link
+                to="/logs"
+                className="text-sm text-slate-600 hover:text-slate-900"
+              >
+                Activity
+              </Link>
+              <Link
+                to="/admin"
+                className="text-sm text-slate-600 hover:text-slate-900"
+              >
+                Admin
+              </Link>
             </div>
           )}
         </div>
         <div>
           {token ? (
-            <button className="btn-outline" onClick={doLogout}>
+            <button
+              className="inline-flex items-center px-3 py-2 border rounded border-slate-300 text-slate-700"
+              onClick={doLogout}
+            >
               Logout
             </button>
           ) : (
-            <Link to="/login" className="btn-primary">
+            <Link
+              to="/login"
+              className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded"
+            >
               Login
             </Link>
           )}

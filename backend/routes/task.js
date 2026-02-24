@@ -7,6 +7,7 @@ import {
   addTaskLog,
   listTaskLogs,
   getProjectDetails,
+  listAllTasks,
 } from "../controllers/taskController.js";
 import authMiddleware from "../middleware/auth.js";
 import authorize from "../middleware/authorize.js";
@@ -48,7 +49,13 @@ router.put(
   validate(updateTaskSchema),
   updateTask,
 );
-
+// return a list of tasks (can filter with query params such as status or project)
+router.get(
+  "/tasks",
+  authMiddleware,
+  authorize(Permissions.TASK_VIEW),
+  listAllTasks,
+);
 // task logs
 router.post(
   "/projects/:projectId/tasks/:taskId/logs",

@@ -2,6 +2,8 @@ import authRoute from "./auth.js";
 import usersRoutes from "./users.js";
 import projectsRoutes from "./projects.js";
 import attendanceRoutes from "./attendance.js";
+import tasksRoutes from "./tasks.js";
+import settingsRoutes from "./settings.js";
 import React from "react";
 import SwitchOrg, {
   loader as switchOrgLoader,
@@ -16,6 +18,8 @@ const protectedChildren = [
   ...usersRoutes,
   ...projectsRoutes,
   ...attendanceRoutes,
+  ...tasksRoutes,
+  ...settingsRoutes,
   {
     path: "switch-org",
     element: React.createElement(SwitchOrg),

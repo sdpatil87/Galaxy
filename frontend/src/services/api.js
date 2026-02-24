@@ -16,4 +16,21 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// response interceptor for errors
+import { showError } from "../utils/toast.js";
+import { logout } from "../store/authSlice.js";
+
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const msg = err.response?.data?.message || err.message || "Unknown error";
+    showError(msg);
+    // if unauthorized, clear token
+    if (err.response?.status === 401) {
+      store.dispatch(logout());
+    }
+    return Promise.reject(err);
+  },
+);
+
 export default api;

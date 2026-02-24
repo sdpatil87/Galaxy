@@ -38,13 +38,20 @@ or override from `.env`.
 - `POST /api/organizations` – create an organization
 - `GET /api/organizations/:id` – get org by id
 
-### Users
+### Users & Settings
 
 - `GET /api/users/:id` – get user profile
-- `PUT /api/users/:id` – update user
+- `PUT /api/users/:id` – update user profile
+- `GET /api/users/:id/settings` – get user settings (theme, notifications, etc.)
+- `PUT /api/users/:id/settings` – update user settings
 - `GET /api/users/organization/:orgId` – list users in an org
 
-### Roles & Permissions
+### User Roles & Permissions
+
+- `POST /api/users/roles` – add a role to a user (`{ userId, orgId, roleId }`)
+- `DELETE /api/users/roles` – remove a role from a user
+
+### Roles
 
 - `GET /api/roles?organization=<id>` – list roles for an org (authenticated)
 - `POST /api/roles` – create a role (`{ organization, name, permissions: [...] }`)
@@ -54,10 +61,12 @@ or override from `.env`.
   > All role endpoints require appropriate permissions (e.g. `role:create`, `role:update`).
   > See `backend/utils/permissions.js` for available permission constants.
 
-### User membership
+### Audit Logs & Activity
 
-- `POST /api/users/roles` – add a role to a user (`{ userId, orgId, roleId }`)
-- `DELETE /api/users/roles` – remove a role from a user
+- `GET /api/logs` – retrieve system audit logs
+  - Superadmin users see all logs
+  - Normal users see only their own activity
+  - query param: `?user=<userId>` to filter by user (superadmin only)
 
 ### Attendance
 
@@ -76,6 +85,8 @@ or override from `.env`.
 - `GET /api/tasks/projects/:projectId` – get project details with tasks
 - `POST /api/tasks/projects/:projectId/tasks` – add task
 - `PUT /api/tasks/tasks/:taskId` – update task
+- `GET /api/tasks/tasks?status=todo` – list tasks, optional query filters (status, project, assignedTo)
+  - pass `project=<id>` to restrict to a specific project (used by frontend pending tasks list)
 
 #### Time logging
 

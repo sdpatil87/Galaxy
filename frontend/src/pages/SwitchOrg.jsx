@@ -29,7 +29,10 @@ export default function SwitchOrg() {
         {orgs.map((o) => (
           <div key={o._id} className="flex items-center justify-between">
             <div>{o.name}</div>
-            <button className="btn-primary" onClick={() => change(o._id)}>
+            <button
+              className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded"
+              onClick={() => change(o._id)}
+            >
               Switch
             </button>
           </div>

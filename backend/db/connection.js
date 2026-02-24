@@ -7,10 +7,7 @@ async function connectDB() {
   if (!uri) {
     throw new Error("MONGO_URI not defined in environment");
   }
-  return mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  return mongoose.connect(uri);
 }
 
 export default connectDB;

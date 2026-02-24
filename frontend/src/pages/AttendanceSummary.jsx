@@ -14,7 +14,7 @@ export default function AttendanceSummary() {
   if (loading) return <div>Loading…</div>;
 
   return (
-    <div className="card">
+    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
       <h3 className="text-lg font-medium">Attendance Summary</h3>
       <pre className="mt-3 text-sm">{JSON.stringify(summary, null, 2)}</pre>
     </div>

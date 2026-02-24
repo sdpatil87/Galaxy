@@ -9,8 +9,10 @@ body,
   height: 100%;
 }
 
+/* basic page colors - feel free to adjust in markup using utility classes */
 body {
-  @apply bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100;
+  background-color: #f9fafb; /* light gray */
+  color: #1f2937; /* gray-800 */
   font-family:
     Inter,
     ui-sans-serif,
@@ -21,13 +23,3 @@ body {
     "Helvetica Neue",
     Arial;
 }
-
-.app-container {
-  @apply max-w-6xl mx-auto p-4;
-}
-
-.card {
-  @apply bg-white dark:bg-slate-800 shadow rounded-lg p-4;
-}
-
-@import "./styles/components.css";

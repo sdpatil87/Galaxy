@@ -13,5 +13,8 @@ export const Permissions = {
   PROJECT_VIEW: "project:view",
   TASK_CREATE: "task:create",
   TASK_UPDATE: "task:update",
-  TASK_VIEW: "task:view", // etc.
+  TASK_VIEW: "task:view",
+  LOG_VIEW: "log:view",
+  SETTINGS_VIEW: "settings:view",
+  SETTINGS_UPDATE: "settings:update",
 };

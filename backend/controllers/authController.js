@@ -34,11 +34,14 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
+    if (!user)
+      return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
 
     if (!comparePasswords(password, user.password)) {
       logEvent("auth_failure", "password mismatch", { email });
-      return res.status(400).json({ message: Messages.ERRORS.INVALID("credentials") });
+      return res
+        .status(400)
+        .json({ message: Messages.ERRORS.INVALID("credentials") });
     }
 
     const token = generateToken({ id: user._id });
@@ -54,7 +57,10 @@ export const refreshToken = async (req, res) => {
   try {
     const { token } = req.body;
     // token verification logic omitted for brevity
-    if (!token) return res.status(400).json({ message: Messages.ERRORS.REQUIRED("token") });
+    if (!token)
+      return res
+        .status(400)
+        .json({ message: Messages.ERRORS.REQUIRED("token") });
     // verify and issue new token
     const newToken = generateToken({ id: req.user.id });
     res.json({ token: newToken });
@@ -68,7 +74,8 @@ export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
+    if (!user)
+      return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
     // send reset link
     const resetLink = `https://example.com/reset?user=${user._id}`;
     try {
@@ -78,7 +85,10 @@ export const forgotPassword = async (req, res) => {
         text: `Click here to reset your password: ${resetLink}`,
       });
     } catch (e) {
-      logEvent("email_error", "password reset email failed", { error: e, user: user._id });
+      logEvent("email_error", "password reset email failed", {
+        error: e,
+        user: user._id,
+      });
     }
     res.json({ message: Messages.SUCCESS.EMAIL_SENT });
   } catch (err) {
@@ -87,3 +97,46 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
+// get current authenticated user profile
+export const me = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user)
+      return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: Messages.ERRORS.SERVER });
+  }
+};
+
+// switch user's current organization
+export const switchOrganization = async (req, res) => {
+  try {
+    const { organizationId } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user)
+      return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
+
+    // check if user has membership in that org
+    const hasMembership = user.memberships.some(
+      (m) => m.organization.toString() === organizationId,
+    );
+    if (!hasMembership) {
+      return res.status(403).json({ message: Messages.ERRORS.UNAUTHORIZED });
+    }
+
+    user.currentOrg = organizationId;
+    await user.save();
+
+    logEvent("org_switched", "user switched organization", {
+      user: req.user.id,
+      org: organizationId,
+    });
+
+    res.json({ message: "Organization switched", user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: Messages.ERRORS.SERVER });
+  }
+};

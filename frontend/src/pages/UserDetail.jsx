@@ -45,14 +45,23 @@ export default function UserDetail() {
       <form onSubmit={handleSubmit(onSubmit)} className="mt-3 space-y-3">
         <div>
           <label className="block text-sm">Name</label>
-          <input {...register("name")} className="input" />
+          <input
+            {...register("name")}
+            className="w-full border border-slate-200 dark:border-slate-700 rounded px-3 py-2 bg-transparent"
+          />
         </div>
         <div>
           <label className="block text-sm">Email</label>
-          <input {...register("email")} className="input" />
+          <input
+            {...register("email")}
+            className="w-full border border-slate-200 dark:border-slate-700 rounded px-3 py-2 bg-transparent"
+          />
         </div>
         <div>
-          <button className="btn-primary" type="submit">
+          <button
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded"
+            type="submit"
+          >
             Save
           </button>
         </div>

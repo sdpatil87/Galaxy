@@ -11,7 +11,10 @@ export const createProject = async (req, res) => {
       createdBy: req.user.id,
     };
     const project = await projectService.createProject(data);
-    logEvent("project_created", "project created", { project: project._id, organization: data.organization });
+    logEvent("project_created", "project created", {
+      project: project._id,
+      organization: data.organization,
+    });
     res.status(201).json(project);
   } catch (err) {
     console.error(err);
@@ -39,7 +42,10 @@ export const addTask = async (req, res) => {
       assignedTo: req.body.assignedTo,
     };
     const task = await taskService.createTask(data);
-    logEvent("task_created", "task created", { task: task._id, project: data.project });
+    logEvent("task_created", "task created", {
+      task: task._id,
+      project: data.project,
+    });
     res.status(201).json(task);
   } catch (err) {
     console.error(err);
@@ -50,7 +56,10 @@ export const addTask = async (req, res) => {
 export const updateTask = async (req, res) => {
   try {
     const task = await taskService.updateTask(req.params.taskId, req.body);
-    logEvent("task_updated", "task updated", { task: req.params.taskId, updates: req.body });
+    logEvent("task_updated", "task updated", {
+      task: req.params.taskId,
+      updates: req.body,
+    });
     res.json(task);
   } catch (err) {
     console.error(err);
@@ -63,9 +72,9 @@ export const addTaskLog = async (req, res) => {
     const { projectId, taskId } = req.params;
     const { start, end, note } = req.body;
     if (!start || !end) {
-      return res
-        .status(400)
-        .json({ message: Messages.ERRORS.REQUIRED("start and end timestamps") });
+      return res.status(400).json({
+        message: Messages.ERRORS.REQUIRED("start and end timestamps"),
+      });
     }
     const duration = (new Date(end) - new Date(start)) / 3600000; // hours
     const log = {
@@ -81,7 +90,12 @@ export const addTaskLog = async (req, res) => {
     task.hoursLogged = total;
     await task.save();
 
-    logEvent("task_log_added", "task log added", { task: taskId, project: projectId, user: req.user.id, duration });
+    logEvent("task_log_added", "task log added", {
+      task: taskId,
+      project: projectId,
+      user: req.user.id,
+      duration,
+    });
 
     res.status(201).json(task);
   } catch (err) {
@@ -94,7 +108,8 @@ export const listTaskLogs = async (req, res) => {
   try {
     const { taskId } = req.params;
     const task = await taskService.listLogs(taskId);
-    if (!task) return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
+    if (!task)
+      return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
     res.json(task.logs);
   } catch (err) {
     console.error(err);
@@ -106,8 +121,13 @@ export const getProjectDetails = async (req, res) => {
   try {
     const { projectId } = req.params;
     const project = await projectService.getProjectById(projectId);
-    if (!project) return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
-    const tasks = await taskService.listTasks({ project: projectId });
+    if (!project)
+      return res.status(404).json({ message: Messages.ERRORS.NOT_FOUND });
+    // populate assignedTo on tasks for display convenience
+    const tasks = await taskService.listTasks(
+      { project: projectId },
+      { populate: ["assignedTo"] },
+    );
     res.json({ project, tasks });
   } catch (err) {
     console.error(err);
@@ -115,3 +135,19 @@ export const getProjectDetails = async (req, res) => {
   }
 };
 
+// list tasks with optional query filters (status, project, assignedTo etc.)
+export const listAllTasks = async (req, res) => {
+  try {
+    const filter = {};
+    if (req.query.status) filter.status = req.query.status;
+    if (req.query.project) filter.project = req.query.project;
+    if (req.query.assignedTo) filter.assignedTo = req.query.assignedTo;
+    const tasks = await taskService.listTasks(filter, {
+      populate: ["project", "assignedTo"],
+    });
+    res.json(tasks);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: Messages.ERRORS.SERVER });
+  }
+};

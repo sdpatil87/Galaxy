@@ -17,7 +17,7 @@ export default function Users() {
 
   return (
     <div className="mt-6">
-      <div className="card">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
         <h2 className="text-lg font-semibold">Users</h2>
         <FilterBar onFilter={(f) => setFilters(f)} />
         <div className="mt-4">

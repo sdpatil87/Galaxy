@@ -6,7 +6,7 @@ export default function MainLayout({ children }) {
   return (
     <div>
       <Navbar />
-      <main className="app-container">{children}</main>
+      <main className="max-w-6xl mx-auto p-4">{children}</main>
       <Toaster position="top-right" />
       <Footer />
     </div>

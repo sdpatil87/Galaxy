@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 
 import User from "./models/User.js";
 import Organization from "./models/Organization.js";
+import { Messages } from "./utils/messages.js";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ import userRoutes from "./routes/user.js";
 import roleRoutes from "./routes/role.js";
 import attendanceRoutes from "./routes/attendance.js";
 import taskRoutes from "./routes/task.js";
+import logsRoutes from "./routes/logs.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/organizations", organizationRoutes);
@@ -48,6 +50,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/logs", logsRoutes);
 
 // example protected route
 app.get("/api/protected", authMiddleware, (req, res) => {
